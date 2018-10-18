@@ -1,41 +1,49 @@
 package com.vishwa.lanmessaging;
 
-class UserData{
-    UP U[] = new UP[15];
-    UserData(){
-        for(int i=0;i<15;i++){
-            U[i] = new UP();
-        }
-        U[0] = new UP("ravi","ravi123");
-        U[1] = new UP("vishwa","vishwa123");
-        U[2] = new UP("shashi","shashi123");
-        U[3] = new UP("riteesh","riteesh123");
-        U[4] = new UP("teja","teja123");
-        U[5] = new UP("vamsi","vamsi123");
-        U[6] = new UP("chaitanya","chaitanya123");
-        U[7] = new UP("madhu","madhu123");
-        U[8] = new UP("phani","phani123");
-        U[9] = new UP("sriram","sriram123");
-        U[10] = new UP("dheeraj","dheeraj123");
-        U[11] = new UP("riyaz","riyaz123");
-        U[12] = new UP("sai","sai123");
-        U[13] = new UP("gopi","gopi123");
-        U[14] = new UP("rakesh","rakesh123");
+class UserData {
+    User users[] = new User[15];
 
+    UserData() {
+        for (int i = 0; i < 15; i++) {
+            users[i] = new User();
+        }
+        users[0] = new User("ravi", "ravi123");
+        users[1] = new User("vishwa", "vishwa123");
+        users[2] = new User("shashi", "shashi123");
+        users[3] = new User("riteesh", "riteesh123");
+        users[4] = new User("teja", "teja123");
+        users[5] = new User("vamsi", "vamsi123");
+        users[6] = new User("chaitanya", "chaitanya123");
+        users[7] = new User("madhu", "madhu123");
+        users[8] = new User("phani", "phani123");
+        users[9] = new User("sriram", "sriram123");
+        users[10] = new User("dheeraj", "dheeraj123");
+        users[11] = new User("riyaz", "riyaz123");
+        users[12] = new User("sai", "sai123");
+        users[13] = new User("gopi", "gopi123");
+        users[14] = new User("rakesh", "rakesh123");
     }
 
+    int searchAndGetUserIndex(String uname) {
+        int i;
+        for (i = 0; i < 15; i++) {
+            if (uname.compareTo(users[i].Username) == 0) {
+                break;
+            }
+        }
+        return i;
+    }
 }
-class UP{
+
+class User {
     String Username;
     String Password;
-    UP(){
+
+    User() {
     }
-    UP(String uname , String pwd){
-        Username = uname;
+
+    User(String userName, String pwd) {
+        Username = userName;
         Password = pwd;
     }
-}
-class Qwerty{
-    int z;
-   static int index;
 }
