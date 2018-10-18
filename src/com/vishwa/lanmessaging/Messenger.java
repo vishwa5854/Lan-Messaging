@@ -1,0 +1,111 @@
+package com.vishwa.lanmessaging;
+
+import java.io.*;
+import java.util.HashMap;
+import java.util.Scanner;
+import java.util.Set;
+
+class Messenger {
+    private Scanner in = new Scanner(System.in);
+
+    String getUserName(Set<String> usersList)
+    {
+        Scanner in = new Scanner(System.in);
+        System.out.print("Username:");
+        String userName = in.next();
+
+        if (!usersList.contains(userName)) {
+            System.out.println("you are not recognised as a user in vishwa's domain");
+            return null;
+        }
+        return userName;
+    }
+
+    boolean login(User user) throws Exception {
+
+        System.out.print("password:");
+        String password = in.next();
+
+        boolean isPasswordValid = verifyPassword(password, user);
+
+        if (!isPasswordValid) {
+            System.out.print("Invalid password");
+            return false;
+        }
+
+        FileHelper.setStatusToOnline(user.getUserName(), true);
+        System.out.println("\t \t \t Welcome Mr." + user.getUserName() + "\t \t login successful");
+        return true;
+    }
+
+    String searchFriend(Set<String> usersList, String currentUserName) {
+        usersList.forEach((userName) -> System.out.println("\t \t \t" + userName));
+        System.out.print("With whom do u wanna chat:");
+
+        Scanner in = new Scanner(System.in);
+        String friendName = in.next();
+
+        if (!usersList.contains(friendName)) {
+            System.out.print("User does not exists ");
+            return null;
+        }
+        if (currentUserName.compareTo(friendName) == 0) {
+            System.out.print("Chatting with yourself is not supported");
+            return null;
+        }
+        return friendName;
+    }
+
+    void chat(String loggedInUserName, String friendName) {
+        final int OPTION_COMPOSE = 1;
+        final int OPTION_VIEW_INBOX = 2;
+        final int OPTION_LOGOUT = 3;
+        final int OPTION_CHECK_IF_ONLINE = 4;
+
+        try {
+            while (true) {
+                int choice = getChoice();
+                switch (choice) {
+                    case OPTION_COMPOSE:
+                        sendMessage(loggedInUserName, friendName);
+                        break;
+                    case OPTION_VIEW_INBOX:
+                        FileHelper.viewInbox(loggedInUserName, friendName);
+                        break;
+                    case OPTION_LOGOUT:
+                        FileHelper.setStatusToOnline(loggedInUserName, false);
+                        System.exit(0);
+                        break;
+                    case OPTION_CHECK_IF_ONLINE:
+                        FileHelper.checkIfOnline(friendName);
+                        break;
+                    default:
+                        System.out.println("INVALID CHOICE");
+                }
+            }
+        } catch (IOException ignored) {
+        }
+    }
+
+    private void sendMessage(String loggedInUserName, String friendName) throws IOException {
+        System.out.print("Enter your message:");
+        String message = in.next();
+        message += in.nextLine();
+        message += "\n";
+        FileHelper.createAChatFileIfNotExists(loggedInUserName, friendName);
+        FileHelper.writeMessage(loggedInUserName, friendName, message);
+    }
+
+    private int getChoice() {
+        System.out.println("\t \t \t VISHWA's MAIL");
+        System.out.println("\t \t1.Compose 2.Inbox 3.Logout 4.Check if Online");
+        System.out.print("choice:");
+        return in.nextInt();
+    }
+
+
+    private boolean verifyPassword(String password, User user) {
+        return user.getPassword().compareTo(password) == 0;
+    }
+
+}

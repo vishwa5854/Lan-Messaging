@@ -1,49 +1,53 @@
 package com.vishwa.lanmessaging;
 
+import java.util.HashMap;
+
 class UserData {
-    User users[] = new User[15];
+
+    private HashMap<String, User> _users;
 
     UserData() {
-        for (int i = 0; i < 15; i++) {
-            users[i] = new User();
-        }
-        users[0] = new User("ravi", "ravi123");
-        users[1] = new User("vishwa", "vishwa123");
-        users[2] = new User("shashi", "shashi123");
-        users[3] = new User("riteesh", "riteesh123");
-        users[4] = new User("teja", "teja123");
-        users[5] = new User("vamsi", "vamsi123");
-        users[6] = new User("chaitanya", "chaitanya123");
-        users[7] = new User("madhu", "madhu123");
-        users[8] = new User("phani", "phani123");
-        users[9] = new User("sriram", "sriram123");
-        users[10] = new User("dheeraj", "dheeraj123");
-        users[11] = new User("riyaz", "riyaz123");
-        users[12] = new User("sai", "sai123");
-        users[13] = new User("gopi", "gopi123");
-        users[14] = new User("rakesh", "rakesh123");
+        initialise();
     }
 
-    int searchAndGetUserIndex(String uname) {
-        int i;
-        for (i = 0; i < 15; i++) {
-            if (uname.compareTo(users[i].Username) == 0) {
-                break;
-            }
-        }
-        return i;
+    private void initialise() {
+        _users = new HashMap<>();
+        _users.put("ravi", new User("ravi", "ravi123"));
+        _users.put("vishwa", new User("vishwa", "vishwa123"));
+        _users.put("shashi", new User("shashi", "shashi123"));
+        _users.put("riteesh", new User("riteesh", "riteesh123"));
+        _users.put("teja", new User("teja", "teja123"));
+        _users.put("vamsi", new User("vamsi", "vamsi123"));
+        _users.put("chaitanya", new User("chaitanya", "chaitanya123"));
+        _users.put("madhu", new User("madhu", "madhu123"));
+        _users.put("phani", new User("phani", "phani123"));
+        _users.put("sriram", new User("sriram", "sriram123"));
+        _users.put("dheeraj", new User("dheeraj", "dheeraj123"));
+        _users.put("riyaz", new User("riyaz", "riyaz123"));
+        _users.put("sai", new User("sai", "sai123"));
+        _users.put("gopi", new User("gopi", "gopi123"));
+        _users.put("rakesh", new User("rakesh", "rakesh123"));
+    }
+
+    HashMap<String, User> getUsers() {
+        return _users;
     }
 }
 
 class User {
-    String Username;
-    String Password;
-
-    User() {
-    }
+    private String _userName;
+    private String _password;
 
     User(String userName, String pwd) {
-        Username = userName;
-        Password = pwd;
+        _userName = userName;
+        _password = pwd;
+    }
+
+    String getPassword() {
+        return _password;
+    }
+
+    String getUserName() {
+        return _userName;
     }
 }
