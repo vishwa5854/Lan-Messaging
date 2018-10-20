@@ -1,5 +1,4 @@
 package com.vishwa.lanmessaging;
-
 import java.io.*;
 
 class FilesInitialisation {

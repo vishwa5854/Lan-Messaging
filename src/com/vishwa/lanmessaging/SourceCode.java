@@ -10,24 +10,23 @@ class SourceCode {
     private final int OPTION_VIEW_INBOX = 2;
     private final int OPTION_LOGOUT = 3;
     private final int OPTION_CHECK_IF_ONLINE = 4;
-
+    private final int OPTION_MODIFY_PASSWORD = 5;
     void code(UserData userData, int userIndex) throws Exception {
-        int r;
         printUsers(userData);
-        System.out.print("With whom do u wanna chat:");
+        try {
+            System.out.print("With whom do u wanna chat:");
 
-        Scanner in = new Scanner(System.in);
-        String target = in.next();
+            Scanner in = new Scanner(System.in);
+            String target = in.next();
 
-        int targetIndex = userData.searchAndGetUserIndex(target);
-        if (targetIndex < 15) {
-            FilesInitialisation z = new FilesInitialisation();
-            z.createAChatFileIfNotExists(userData, userIndex, targetIndex);
-            z.createAChatFileIfNotExists(userData, targetIndex, userIndex);
-            try {
+            int targetIndex = userData.searchAndGetUserIndex(target);
+            if (targetIndex < 15) {
+                FilesInitialisation z = new FilesInitialisation();
+                z.createAChatFileIfNotExists(userData, userIndex, targetIndex);
+                z.createAChatFileIfNotExists(userData, targetIndex, userIndex);
                 while (true) {
                     System.out.println("\t \t \t VISHWA's MAIL");
-                    System.out.println("\t \t1.Compose 2.Inbox 3.Logout 4.Check if Online");
+                    System.out.println("\t \t1.Compose 2.Inbox 3.Logout 4.Check if Online 5.Change password or username");
                     System.out.print("choice:");
                     int choice = in.nextInt();
                     switch (choice) {
@@ -51,21 +50,23 @@ class SourceCode {
                             System.out.println("checking...");
                             z.checkIfOnline(target);
                             break;
+                        case OPTION_MODIFY_PASSWORD:
+                            userData.modifyUserData(userIndex);
                         default:
                             System.out.println("INVALID CHOICE");
                     }
                 }
-            } catch (FileNotFoundException L) {
-                System.out.println("you are not connected to the same LAN");
-            } catch (ArrayIndexOutOfBoundsException K) {
-                System.out.println("You are not allowed to chat in this chat box");
-            } catch (InputMismatchException I) {
-                System.out.println("Invalid choice");
-                this.code(userData, userIndex);
+            } else {
+                System.out.println("No such user exists please try again");
             }
-        } else {
-            System.out.println("No such user exists please try again");
-            System.exit(0);
+        }
+        catch (FileNotFoundException l) {
+            System.out.println("you are not connected to the same LAN");
+        } catch (ArrayIndexOutOfBoundsException K) {
+            System.out.println("You are not allowed to chat in this chat box");
+        } catch (InputMismatchException I) {
+            System.out.println("Invalid choice");
+            this.code(userData, userIndex);
         }
     }
 

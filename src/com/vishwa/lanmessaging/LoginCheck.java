@@ -27,12 +27,13 @@ class LoginCheck {
             }
         } else {
             System.out.println("you are not recognised as a user in vishwa's domain");
+            index = -1;
         }
         return index;
 
     }
 
-    int Search(User users[], String uname) {
+    private int Search(User users[], String uname) {
         int i;
         for (i = 0; i < 15; i++) {
             if (uname.compareTo(users[i].Username) == 0) {
