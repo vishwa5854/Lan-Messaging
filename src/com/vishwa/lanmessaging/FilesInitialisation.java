@@ -4,15 +4,15 @@ import java.io.*;
 class FilesInitialisation {
 
     void createAChatFileIfNotExists(UserData userData, int index, int targetIndex) throws Exception {
-        File file = new File("//SRIRAM/PROJECTMESSAGING/" + userData.users[index].Username + " to " + userData.users[targetIndex].Username + ".txt");
+        File file = new File("//SRIRAM/PROJECTMESSAGING/" + userData.getUsers(index).Username + " to " + userData.getUsers(targetIndex).Username + ".txt");
         if (!file.exists()) {
             file.createNewFile();
         }
     }
 
     void writeMessage(UserData userData, int userIndex, int targetIndex, String message) throws Exception {
-        Writer f = new FileWriter("//SRIRAM/PROJECTMESSAGING/" + userData.users[userIndex].Username + " to " + userData.users[targetIndex].Username + ".txt", false);
-        Writer logFileWriter = new FileWriter("//SRIRAM/PROJECTMESSAGING/" + "LOG" + userData.users[userIndex].Username + " to " + userData.users[targetIndex].Username + ".txt", true);
+        Writer f = new FileWriter("//SRIRAM/PROJECTMESSAGING/" + userData.getUsers(userIndex).Username + " to " + userData.getUsers(targetIndex).Username + ".txt", false);
+        Writer logFileWriter = new FileWriter("//SRIRAM/PROJECTMESSAGING/" + "LOG" + userData.getUsers(userIndex).Username + " to " + userData.getUsers(targetIndex).Username + ".txt", true);
 
         String encryptedMessage = encryptOrDecryptMessage(message, true);
         f.write(encryptedMessage);

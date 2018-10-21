@@ -5,7 +5,7 @@ public class Main {
         UserData userData = new UserData();
         userData.setUsers();
         LoginCheck loginCheck = new LoginCheck();
-        int userIndex = loginCheck.login(userData.users);
+        int userIndex = loginCheck.login(userData.getUsers(true));
 
         if (userIndex == -1) {
             System.out.print("Invalid Username or password");

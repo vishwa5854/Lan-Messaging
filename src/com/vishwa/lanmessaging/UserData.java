@@ -4,12 +4,23 @@ import java.util.Scanner;
 
 class UserData {
     private Scanner in = new Scanner(System.in);
-    User users[] = new User[15];
+    private User users[] = new User[15];
         private FileReader fileReader = new FileReader("//SRIRAM/PROJECTMESSAGING/UserData.txt");
         private BufferedReader bufferedReader = new BufferedReader(fileReader);
     UserData() throws Exception {
         for(int i=0;i<15;i++){
             users[i] = new User();
+        }
+    }
+    User getUsers(int index){
+        return users[index];
+    }
+    User[] getUsers(boolean allornot){
+        if(allornot) {
+            return users;
+        }
+        else{
+            return null;
         }
     }
     void setUsers() throws IOException {
@@ -33,7 +44,6 @@ class UserData {
                 }
             }
         }
-        printUserData();
     }
 
 
@@ -69,7 +79,8 @@ class UserData {
         if(choice == 1){
             System.out.print("Enter the new Username:");
             users[index].Username = in.next();
-            file.seek(countFseekValue(index,true));
+            file.seek(countFseekValue(index,true)+1);
+            file.skipBytes(1);
             file.writeUTF(new StringBuilder().append("\n").append(users[index].Username).toString());
         }
         else {
@@ -80,12 +91,7 @@ class UserData {
         }
     }
 
-    private void printUserData(){
-        for(int i=0;i<15;i++){
-            System.out.println(users[i].Username);
-            System.out.println(users[i].Password);
-        }
-    }
+
 
 
 

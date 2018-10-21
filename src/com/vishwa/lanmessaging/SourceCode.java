@@ -41,7 +41,7 @@ class SourceCode {
                             viewInbox(userData, userIndex, targetIndex);
                             break;
                         case OPTION_LOGOUT:
-                            Writer zx = new FileWriter("//SRIRAM/PROJECTMESSAGING/" + userData.users[userIndex].Username + "_check_if_online.txt");
+                            Writer zx = new FileWriter("//SRIRAM/PROJECTMESSAGING/" + userData.getUsers(userIndex).Username + "_check_if_online.txt");
                             zx.write("offline");
                             zx.close();
                             System.exit(0);
@@ -71,7 +71,7 @@ class SourceCode {
     }
 
     private void viewInbox(UserData userData, int currentUserIndex, int targetIndex) throws IOException {
-        FileReader fileReader = new FileReader("//SRIRAM/PROJECTMESSAGING/" + userData.users[targetIndex].Username + " to " + userData.users[currentUserIndex].Username + ".txt");
+        FileReader fileReader = new FileReader("//SRIRAM/PROJECTMESSAGING/" + userData.getUsers(targetIndex).Username + " to " + userData.getUsers(currentUserIndex).Username + ".txt");
         BufferedReader bufferedReader = new BufferedReader(fileReader);
 
         String message = bufferedReader.readLine();
@@ -79,7 +79,7 @@ class SourceCode {
         FilesInitialisation z = new FilesInitialisation();
         String decryptedMessage = z.encryptOrDecryptMessage(message, false);
 
-        System.out.println(userData.users[currentUserIndex].Username + ":" + decryptedMessage);
+        System.out.println(userData.getUsers(currentUserIndex).Username + ":" + decryptedMessage);
 
         fileReader.close();
         bufferedReader.close();
@@ -87,7 +87,7 @@ class SourceCode {
 
     private void printUsers(UserData userData) {
         for (int z = 0; z < 15; z++) {
-            System.out.println("\t \t \t" + userData.users[z].Username);
+            System.out.println("\t \t \t" + userData.getUsers(z).Username);
         }
     }
 }
