@@ -1,36 +1,85 @@
 package com.vishwa.lanmessaging;
 
+import java.io.*;
 import java.util.HashMap;
+import java.util.Scanner;
 
 class UserData {
-
+    private Scanner in = new Scanner(System.in);
     private HashMap<String, User> _users;
 
-    UserData() {
+    UserData() throws IOException {
         initialise();
     }
 
-    private void initialise() {
+    private void initialise() throws IOException {
         _users = new HashMap<>();
-        _users.put("ravi", new User("ravi", "ravi123"));
-        _users.put("vishwa", new User("vishwa", "vishwa123"));
-        _users.put("shashi", new User("shashi", "shashi123"));
-        _users.put("riteesh", new User("riteesh", "riteesh123"));
-        _users.put("teja", new User("teja", "teja123"));
-        _users.put("vamsi", new User("vamsi", "vamsi123"));
-        _users.put("chaitanya", new User("chaitanya", "chaitanya123"));
-        _users.put("madhu", new User("madhu", "madhu123"));
-        _users.put("phani", new User("phani", "phani123"));
-        _users.put("sriram", new User("sriram", "sriram123"));
-        _users.put("dheeraj", new User("dheeraj", "dheeraj123"));
-        _users.put("riyaz", new User("riyaz", "riyaz123"));
-        _users.put("sai", new User("sai", "sai123"));
-        _users.put("gopi", new User("gopi", "gopi123"));
-        _users.put("rakesh", new User("rakesh", "rakesh123"));
+        FileReader fileReader = new FileReader("//SRIRAM/PROJECTMESSAGING/UserData.txt");
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        for(int k=0;k<15;k++) {
+            String line = bufferedReader.readLine();
+            String userData[] = line.split(",");
+            _users.put(userData[0],new User(userData[0],userData[1]));
+        }
     }
+    private void printUserData(){
+        for(String key : _users.keySet()){
+            System.out.println(key);
+        }
+    }
+
+
 
     HashMap<String, User> getUsers() {
         return _users;
+    }
+
+
+    void modifyUserData(String loggedInUsername)throws Exception{
+        FileWriter fileWriter = new FileWriter("//SRIRAM/PROJECTMESSAGING/UserData.txt");
+        BufferedWriter writer = new BufferedWriter(fileWriter);
+        System.out.println("What do u want to chane??");
+        System.out.println("1.Username \t \t 2.Password");
+        int choice = in.nextInt();
+        User currentUser = _users.get(loggedInUsername);
+        Messenger messenger = new Messenger();
+        if(choice == 1){
+            System.out.print("To verify its you please enter your");
+            boolean isLogin = messenger.login(currentUser);
+            if(isLogin){
+                System.out.print("Enter your new username:");
+                String newUsername = in.next();
+                _users.remove(loggedInUsername);
+                _users.put(newUsername,new User(newUsername,currentUser.getPassword()));
+                for(User key : _users.values()){
+                    writer.write(key.getUserName() + "," + key.getPassword());
+                    writer.newLine();
+                }
+            }
+            else{
+                System.out.println("You are not recognised as " + currentUser +"please login again and try later");
+                System.exit(0);
+            }
+        }
+        else{
+            System.out.print("To verify its you please enter your");
+            boolean isLogin = messenger.login(currentUser);
+            if(isLogin){
+                System.out.print("Enter your new password:");
+                String newPassword = in.next();
+                _users.remove(loggedInUsername);
+                _users.put(loggedInUsername,new User(loggedInUsername,newPassword));
+                for(User key : _users.values()){
+                    writer.write(key.getUserName() + "," + key.getPassword());
+                    writer.newLine();
+                }
+            }
+            else{
+                System.out.println("You are not recognised as " + currentUser +"please login again and try later");
+                System.exit(0);
+            }
+        }
+        writer.close();
     }
 }
 
@@ -50,4 +99,6 @@ class User {
     String getUserName() {
         return _userName;
     }
+
+
 }

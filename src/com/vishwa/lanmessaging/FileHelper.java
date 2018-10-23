@@ -13,13 +13,12 @@ class FileHelper {
         File file = new File(String.format(_fileNamePattern, user1, user2));
         try {
             file.createNewFile();
-        } catch (IOException e) {
-            System.out.println("Unable to create a file to store messages from " + user1 + "to " + user2);
-            throw e;
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to create a file to store messages from " + user1 + "to " + user2+ "\n" + "as you are not connected to the same LAN");
         }
     }
 
-    static void writeMessage(String mySelf, String friend, String message) throws IOException {
+    static void writeMessage(String mySelf, String friend, String message){
         try {
             Writer  f = new FileWriter(String.format(_fileNamePattern, mySelf, friend), false);
             Writer logFileWriter = new FileWriter(String.format(_logFileNamePattern, mySelf, friend), true);
@@ -31,25 +30,22 @@ class FileHelper {
             logFileWriter.close();
         } catch (IOException e) {
             System.out.println("Unable to write messages from " + mySelf + "to " + friend);
-            throw e;
+            System.out.println("You are not connected to the same LAN");
         }
 
     }
 
     static void checkIfOnline(String friend) throws IOException {
-        StringBuilder stringBuilder = new StringBuilder();
+        String stringBuilder = null;
         String onlineMessage = "online";
 
         String friendStatusFilePath = String.format(_statusFileNamePattern, friend);
         System.out.println("checking...");
         try {
-            FileInputStream fileInputStream = new FileInputStream(friendStatusFilePath);
-            int i;
-
-            while ((i = fileInputStream.read()) != -1) {
-                stringBuilder.append((char) i);
-            }
-            fileInputStream.close();
+            FileReader fileReader = new FileReader(friendStatusFilePath);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            stringBuilder = bufferedReader.readLine();
+            bufferedReader.close();
         } catch (FileNotFoundException e) {
             File nap1 = new File(friendStatusFilePath);
             try {
@@ -63,13 +59,11 @@ class FileHelper {
             throw e;
         }
 
-        if (onlineMessage.compareTo(stringBuilder.toString()) == 0) {
+        if (onlineMessage.compareTo(stringBuilder) == 0) {
             System.out.println(friend + "is online");
         } else {
             System.out.println("User is offline but u can send messages to him");
         }
-
-        System.out.println(stringBuilder);
     }
 
     static void viewInbox(String loggedUserName, String friend) throws IOException {
@@ -81,20 +75,19 @@ class FileHelper {
 
             String decryptedMessage = encryptOrDecryptMessage(message, false);
 
-            System.out.println(loggedUserName + ":" + decryptedMessage);
+            System.out.println(friend + ":" + decryptedMessage);
 
             fileReader.close();
             bufferedReader.close();
         } catch (FileNotFoundException e) {
-            System.out.println("Lost " + friend + "'s messages file");
-            throw e;
-        } catch (IOException e) {
-            System.out.println("Unable to read messages from " + friend);
-            throw e;
+            System.out.println("There are no messages in inbox from "+friend);
+           createAChatFileIfNotExists(loggedUserName,friend);
+        }
+        catch (IOException ll){
         }
     }
 
-    static void setStatusToOnline(String userName, boolean online) throws IOException {
+    static void setStatusToOnline(String userName, boolean online) {
         String statusMessage = online ? "online" : "offline";
         try {
             Writer w = new FileWriter(String.format(_statusFileNamePattern, userName));
@@ -103,7 +96,6 @@ class FileHelper {
             w.close();
         } catch (IOException e) {
             System.out.println("Failed to change your status to online");
-            throw e;
         }
     }
 

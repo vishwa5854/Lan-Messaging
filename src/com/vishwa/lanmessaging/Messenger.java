@@ -61,6 +61,7 @@ class Messenger {
         final int OPTION_VIEW_INBOX = 2;
         final int OPTION_LOGOUT = 3;
         final int OPTION_CHECK_IF_ONLINE = 4;
+        final int OPTION_CHANGE_USER_DETAILS = 5;
 
         try {
             while (true) {
@@ -79,11 +80,16 @@ class Messenger {
                     case OPTION_CHECK_IF_ONLINE:
                         FileHelper.checkIfOnline(friendName);
                         break;
+                    case OPTION_CHANGE_USER_DETAILS:
+                        UserData userData = new UserData();
+                        userData.modifyUserData(loggedInUserName);
+                        case '\n':
+                            break;
                     default:
                         System.out.println("INVALID CHOICE");
                 }
             }
-        } catch (IOException ignored) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -98,7 +104,7 @@ class Messenger {
 
     private int getChoice() {
         System.out.println("\t \t \t VISHWA's MAIL");
-        System.out.println("\t \t1.Compose 2.Inbox 3.Logout 4.Check if Online");
+        System.out.println("\t \t1.Compose    2.Inbox     3.Logout    4.Check if Online     5.ModifyYourData");
         System.out.print("choice:");
         return in.nextInt();
     }
