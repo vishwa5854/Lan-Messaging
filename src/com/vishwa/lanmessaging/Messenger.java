@@ -1,7 +1,6 @@
 package com.vishwa.lanmessaging;
 
 import java.io.*;
-import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -13,15 +12,17 @@ class Messenger {
         Scanner in = new Scanner(System.in);
         System.out.print("Username:");
         String userName = in.next();
-
+        userName += in.nextLine();
         if (!usersList.contains(userName)) {
             System.out.println("you are not recognised as a user in vishwa's domain");
-            return null;
+            System.out.println("Try another username ");
+            getUserName(usersList);
+
         }
         return userName;
     }
 
-    boolean login(User user) throws Exception {
+    boolean login(User user) {
 
         System.out.print("password:");
         String password = in.next();
@@ -75,7 +76,8 @@ class Messenger {
                         break;
                     case OPTION_LOGOUT:
                         FileHelper.setStatusToOnline(loggedInUserName, false);
-                        System.exit(0);
+                        String args[] = {};
+                        Main.main(args);
                         break;
                     case OPTION_CHECK_IF_ONLINE:
                         FileHelper.checkIfOnline(friendName);
@@ -90,6 +92,7 @@ class Messenger {
                 }
             }
         } catch (Exception ignored) {
+
         }
     }
 

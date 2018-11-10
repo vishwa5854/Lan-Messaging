@@ -1,9 +1,7 @@
 package com.vishwa.lanmessaging;
-
 import java.io.*;
 
 class FileHelper {
-
     private static String _directoryPath = "//SRIRAM/PROJECTMESSAGING/";
     private static String _fileNamePattern = _directoryPath + "%s to %s.txt";
     private static String _logFileNamePattern = _directoryPath + "%s to %s.txt";
@@ -35,7 +33,7 @@ class FileHelper {
 
     }
 
-    static void checkIfOnline(String friend) throws IOException {
+    static void checkIfOnline(String friend){
         String stringBuilder = null;
         String onlineMessage = "online";
 
@@ -52,11 +50,9 @@ class FileHelper {
                 nap1.createNewFile();
             } catch (IOException e1) {
                 System.out.println("Unable to read friend (" + friend + ") online status");
-                throw e1;
             }
         } catch (IOException e) {
             System.out.println("Unable to read friend (" + friend + ") online status");
-            throw e;
         }
 
         if (onlineMessage.compareTo(stringBuilder) == 0) {
@@ -80,10 +76,8 @@ class FileHelper {
             fileReader.close();
             bufferedReader.close();
         } catch (FileNotFoundException e) {
-            System.out.println("There are no messages in inbox from "+friend);
-           createAChatFileIfNotExists(loggedUserName,friend);
-        }
-        catch (IOException ll){
+            System.out.println("There are no messages in inbox from " + friend);
+            createAChatFileIfNotExists(loggedUserName, friend);
         }
     }
 
@@ -112,5 +106,9 @@ class FileHelper {
         }
         return new String(a);
     }
+    void createNewStatusFileAfter(String userName) throws IOException {
+        Writer writer = new FileWriter("//SRIRAM/PROJECTMESSAGING/"+ userName +"_check_if_online.txt");
+        writer.write("offline");
+        writer.close();
+    }
 }
-

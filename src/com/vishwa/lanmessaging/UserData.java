@@ -1,5 +1,4 @@
 package com.vishwa.lanmessaging;
-
 import java.io.*;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -11,33 +10,29 @@ class UserData {
     UserData() throws IOException {
         initialise();
     }
-
+    private int countNumberOfLinesInFiles() throws IOException {
+        FileReader fileReader = new FileReader("//SRIRAM/PROJECTMESSAGING/UserData.txt");
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        int i=0;
+        while(bufferedReader.readLine()!=null){
+            i++;
+        }
+       return i;
+    }
     private void initialise() throws IOException {
         _users = new HashMap<>();
         FileReader fileReader = new FileReader("//SRIRAM/PROJECTMESSAGING/UserData.txt");
         BufferedReader bufferedReader = new BufferedReader(fileReader);
-        for(int k=0;k<15;k++) {
+        for(int k=0;k<countNumberOfLinesInFiles();k++) {
             String line = bufferedReader.readLine();
             String userData[] = line.split(",");
             _users.put(userData[0],new User(userData[0],userData[1]));
         }
     }
-    private void printUserData(){
-        for(String key : _users.keySet()){
-            System.out.println(key);
-        }
-    }
 
+    HashMap<String, User> getUsers() { return _users; }
 
-
-    HashMap<String, User> getUsers() {
-        return _users;
-    }
-
-
-    void modifyUserData(String loggedInUsername)throws Exception{
-        FileWriter fileWriter = new FileWriter("//SRIRAM/PROJECTMESSAGING/UserData.txt");
-        BufferedWriter writer = new BufferedWriter(fileWriter);
+    void modifyUserData(String loggedInUsername) throws IOException {
         System.out.println("What do u want to chane??");
         System.out.println("1.Username \t \t 2.Password");
         int choice = in.nextInt();
@@ -50,11 +45,9 @@ class UserData {
                 System.out.print("Enter your new username:");
                 String newUsername = in.next();
                 _users.remove(loggedInUsername);
+                renameFile(loggedInUsername,newUsername);
                 _users.put(newUsername,new User(newUsername,currentUser.getPassword()));
-                for(User key : _users.values()){
-                    writer.write(key.getUserName() + "," + key.getPassword());
-                    writer.newLine();
-                }
+                writeUserDataIntoFile();
             }
             else{
                 System.out.println("You are not recognised as " + currentUser +"please login again and try later");
@@ -69,15 +62,28 @@ class UserData {
                 String newPassword = in.next();
                 _users.remove(loggedInUsername);
                 _users.put(loggedInUsername,new User(loggedInUsername,newPassword));
-                for(User key : _users.values()){
-                    writer.write(key.getUserName() + "," + key.getPassword());
-                    writer.newLine();
-                }
             }
             else{
                 System.out.println("You are not recognised as " + currentUser +"please login again and try later");
                 System.exit(0);
             }
+        }
+    }
+
+    private void renameFile(String loggedInUsername , String newUsername) {
+        File file= new File("//SRIRAM/PROJECTMESSAGING/" + loggedInUsername + "_check_if_online.txt");
+        File newFile = new File("//SRIRAM/PROJECTMESSAGING/" + newUsername + "_check_if_online.txt");
+        if(file.renameTo(newFile)){
+            System.out.println("Username succesfullychanged");
+        }
+    }
+
+    void writeUserDataIntoFile() throws IOException {
+        FileWriter fileWriter = new FileWriter("//SRIRAM/PROJECTMESSAGING/UserData.txt");
+        BufferedWriter writer = new BufferedWriter(fileWriter);
+        for(User key : _users.values()){
+            writer.write(key.getUserName() + "," + key.getPassword());
+            writer.newLine();
         }
         writer.close();
     }
@@ -92,9 +98,7 @@ class User {
         _password = pwd;
     }
 
-    String getPassword() {
-        return _password;
-    }
+    String getPassword() { return _password; }
 
     String getUserName() {
         return _userName;
