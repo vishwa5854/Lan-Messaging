@@ -7,8 +7,7 @@ import java.util.Set;
 class Messenger {
     private Scanner in = new Scanner(System.in);
 
-    String getUserName(Set<String> usersList)
-    {
+    String getUserName(Set<String> usersList) throws IOException {
         Scanner in = new Scanner(System.in);
         System.out.print("Username:");
         String userName = in.next();
@@ -16,13 +15,14 @@ class Messenger {
         if (!usersList.contains(userName)) {
             System.out.println("you are not recognised as a user in vishwa's domain");
             System.out.println("Try another username ");
-            getUserName(usersList);
+            new UserData();
+            userName = getUserName(usersList);
 
         }
         return userName;
     }
 
-    boolean login(User user) {
+    boolean login(User user) throws Exception {
 
         System.out.print("password:");
         String password = in.next();
@@ -31,6 +31,8 @@ class Messenger {
 
         if (!isPasswordValid) {
             System.out.print("Invalid password");
+            String[] args = {};
+            Main.main(args);
             return false;
         }
 
@@ -40,7 +42,9 @@ class Messenger {
     }
 
     String searchFriend(Set<String> usersList, String currentUserName) {
-        usersList.forEach((userName) -> System.out.println("\t \t \t" + userName));
+        for (String userName : usersList) {
+            System.out.println("\t \t \t" + userName);
+        }
         System.out.print("With whom do u wanna chat:");
 
         Scanner in = new Scanner(System.in);
@@ -48,7 +52,8 @@ class Messenger {
 
         if (!usersList.contains(friendName)) {
             System.out.print("User does not exists ");
-            return null;
+            System.out.println("Please choose from the listed ones");
+            searchFriend(usersList,currentUserName);
         }
         if (currentUserName.compareTo(friendName) == 0) {
             System.out.print("Chatting with yourself is not supported");
@@ -76,7 +81,7 @@ class Messenger {
                         break;
                     case OPTION_LOGOUT:
                         FileHelper.setStatusToOnline(loggedInUserName, false);
-                        String args[] = {};
+                        String[] args = {};
                         Main.main(args);
                         break;
                     case OPTION_CHECK_IF_ONLINE:
