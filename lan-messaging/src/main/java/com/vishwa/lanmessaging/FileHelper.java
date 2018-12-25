@@ -2,9 +2,9 @@ package com.vishwa.lanmessaging;
 import java.io.*;
 
 class FileHelper {
-    private static String _directoryPath = "//SRIRAM/PROJECTMESSAGING/";
+    private static String _directoryPath = "//predator/MessagingFiles/";
     private static String _fileNamePattern = _directoryPath + "%s to %s.txt";
-    private static String _logFileNamePattern = _directoryPath + "%s to %s.txt";
+   // private static String _logFileNamePattern = _directoryPath + "%s to %s.txt";
     private static String _statusFileNamePattern = _directoryPath + "%s_check_if_online.txt";
 
     static void createAChatFileIfNotExists(String user1, String user2) throws IOException {
@@ -18,14 +18,11 @@ class FileHelper {
 
     static void writeMessage(String mySelf, String friend, String message){
         try {
-            Writer  f = new FileWriter(String.format(_fileNamePattern, mySelf, friend), false);
-            Writer logFileWriter = new FileWriter(String.format(_logFileNamePattern, mySelf, friend), true);
-
+            Writer  f = new FileWriter(String.format(_fileNamePattern, mySelf, friend), true);
+           // Writer writer = new FileWriter(String.format(_fileNamePattern,mySelf,friend + "status count"),false);
             String encryptedMessage = encryptOrDecryptMessage(message, true);
             f.write(encryptedMessage);
-            logFileWriter.write(encryptedMessage);
             f.close();
-            logFileWriter.close();
         } catch (IOException e) {
             System.out.println("Unable to write messages from " + mySelf + "to " + friend);
             System.out.println("You are not connected to the same LAN");
@@ -34,9 +31,8 @@ class FileHelper {
     }
 
     static void checkIfOnline(String friend){
-        String stringBuilder = null;
+        String stringBuilder = "";
         String onlineMessage = "online";
-
         String friendStatusFilePath = String.format(_statusFileNamePattern, friend);
         System.out.println("checking...");
         try {
@@ -53,6 +49,9 @@ class FileHelper {
             }
         } catch (IOException e) {
             System.out.println("Unable to read friend (" + friend + ") online status");
+        }
+        catch (Exception e){
+            System.out.println("lol");
         }
 
         if (onlineMessage.compareTo(stringBuilder) == 0) {
@@ -107,8 +106,21 @@ class FileHelper {
         return new String(a);
     }
     void createNewStatusFileAfter(String userName) throws IOException {
-        Writer writer = new FileWriter("//SRIRAM/PROJECTMESSAGING/"+ userName +"_check_if_online.txt");
+        Writer writer = new FileWriter("//predator/MessagingFiles/"+ userName +"_check_if_online.txt");
         writer.write("offline");
+        writer.close();
+
+    }
+
+    void setSecurityQuestion(String securityQuestion,String userName) throws IOException {
+
+        Writer  writer  = new FileWriter("//predator/MessagingFiles/" + userName + "securityQuestionFile.txt");
+        try {
+            writer.write(securityQuestion);
+        } catch (IOException e) {
+            //e.printStackTrace();
+            System.out.println("Couldn't write data into security question file");
+        }
         writer.close();
     }
 }
